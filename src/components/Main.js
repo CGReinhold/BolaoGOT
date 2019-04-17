@@ -1,36 +1,11 @@
-// import React, { Component } from 'react';
-// import { Provider } from 'react-redux';
-// import { createStore, applyMiddleware } from 'redux';
-// import ReduxThunk from 'redux-thunk';
-// import reducers from './src/reducers';
-// import Router from './src/Router';
-
-// class App extends Component {
-
-//   componentDidMount() {
-//     console.ignoredYellowBox = ['Setting a timer'];
-//   }
-
-//   render() {
-//     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-
-//     return (
-//       <Provider store={store}>
-//         <Router />
-//       </Provider>
-//     );
-//   }
-// }
-
-// export default App;
-
 import React from 'react';
 import Swiper from "react-native-deck-swiper";
-import { StyleSheet, View, Text, Image, Button } from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 import { Constants } from 'expo';
-import { personagens } from './src/Personagens';
+import { connect } from 'react-redux';
+import { personagens } from '../Personagens';
 
-export default class App extends React.Component {
+class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,9 +26,7 @@ export default class App extends React.Component {
   };
 
   onSwipedAllCards = () => {
-    this.setState({
-      swipedAllCards: true
-    });
+    this.setState({ swipedAllCards: true });
   };
 
   swipeBack = () => {
@@ -168,3 +141,9 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
 });
+
+const mapStateToProps = state => {
+  return { };
+};
+
+export default connect(mapStateToProps, { })(Main);
