@@ -1,170 +1,36 @@
-// import React, { Component } from 'react';
-// import { Provider } from 'react-redux';
-// import { createStore, applyMiddleware } from 'redux';
-// import ReduxThunk from 'redux-thunk';
-// import reducers from './src/reducers';
-// import Router from './src/Router';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import ReduxThunk from 'redux-thunk';
+import firebase from 'firebase';
+import reducers from './src/reducers';
+import Router from './src/Router';
 
-// class App extends Component {
+class App extends Component {
 
-//   componentDidMount() {
-//     console.ignoredYellowBox = ['Setting a timer'];
-//   }
-
-//   render() {
-//     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
-
-//     return (
-//       <Provider store={store}>
-//         <Router />
-//       </Provider>
-//     );
-//   }
-// }
-
-// export default App;
-
-import React from 'react';
-import Swiper from "react-native-deck-swiper";
-import { StyleSheet, View, Text, Image, Button } from "react-native";
-import { Constants } from 'expo';
-import { personagens } from './src/Personagens';
-
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      swipedAllCards: false,
-      swipeDirection: "",
-      isSwipingBack: false,
-      cardIndex: 0
-    };
-  }
-
-  renderCard = card => {
-    return (
-      <View style={styles.card}>
-        <Image style={{ width: 320, height: 320 }} source={{ uri: card.image }} />
-        <Text style={styles.text}>{card.name}</Text>
-      </View>
-    );
-  };
-
-  onSwipedAllCards = () => {
-    this.setState({
-      swipedAllCards: true
-    });
-  };
-
-  swipeBack = () => {
-    if (!this.state.isSwipingBack) {
-      this.setIsSwipingBack(true, () => {
-        this.swiper.swipeBack(() => {
-          this.setIsSwipingBack(false);
-        });
+  componentDidMount() {
+    console.ignoredYellowBox = ['Setting a timer'];
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyD4wuFEhJ34tqrs-xo9--Vg6BTXqWLadbc",
+        authDomain: "bolaogot-276f8.firebaseapp.com",
+        databaseURL: "https://bolaogot-276f8.firebaseio.com",
+        projectId: "bolaogot-276f8",
+        storageBucket: "bolaogot-276f8.appspot.com",
+        messagingSenderId: "923130831542"
       });
     }
-  };
-
-  setIsSwipingBack = (isSwipingBack, cb) => {
-    this.setState(
-      {
-        isSwipingBack: isSwipingBack
-      },
-      cb
-    );
-  };
-
-  jumpTo = () => {
-    this.swiper.jumpToCardIndex(2);
-  };
+  }
 
   render() {
+    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+
     return (
-      <View style={styles.container}>
-        <Swiper
-          useViewOverflow={false}
-          style={styles.swiper}
-          ref={swiper => {
-            this.swiper = swiper;
-          }}
-          onSwiped={this.onSwiped}
-          cards={personagens}
-          cardIndex={this.state.cardIndex}
-          cardVerticalMargin={80}
-          renderCard={this.renderCard}
-          onSwipedAll={this.onSwipedAllCards}
-          showSecondCard={false}
-          verticalSwipe={false}
-          showSecondCard
-          stackSize={2}
-          backgroundColor={'#cecece'}
-          overlayLabels={{
-            left: {
-              title: 'Morre',
-                style: {
-                  label: {
-                    backgroundColor: 'black',
-                    borderColor: 'black',
-                    color: 'white',
-                    borderWidth: 1
-                  },
-                  wrapper: {
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-start',
-                    marginTop: 30,
-                    marginLeft: -30
-                  }
-                }
-              },
-              right: {
-              title: 'Vive',
-                style: {
-                  label: {
-                    backgroundColor: 'black',
-                    borderColor: 'black',
-                    color: 'white',
-                    borderWidth: 1
-                  },
-                  wrapper: {
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    justifyContent: 'flex-start',
-                    marginTop: 30,
-                    marginLeft: 30
-                  }
-                }
-              },
-          }}
-        >
-        </Swiper>
-      </View >
+      <Provider store={store}>
+        <Router />
+      </Provider>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: Constants.statusBarHeight,
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-  swiper: {
-    paddingTop: Constants.statusBarHeight,
-  },
-  card: {
-    flex: 1,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: "#E8E8E8",
-    justifyContent: "center",
-    backgroundColor: "white",
-    alignItems: 'center'
-  },
-  text: {
-    textAlign: "center",
-    fontSize: 50,
-    backgroundColor: "transparent"
-  },
-});
+export default App;
